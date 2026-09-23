@@ -1,0 +1,27 @@
+# Optiseek dependencies — installed on top of the ROCm base image.
+#
+# The base image (rocm/pytorch:rocm10.0_ubuntu26.04_py3.14_pytorch_release_2.13.0)
+# already ships: torch, PIL/Pillow, numpy. We add only what we need.
+#
+# Pin specific versions for reproducibility. ROCm wheels must come from the
+# AMD index, but vllm ships ROCm-compatible wheels on PyPI as of v0.8+.
+
+# Inference — vLLM with ROCm support (primary engine)
+vllm==0.8.5.post1
+
+# Transformers — used both by vLLM internally AND as our fallback engine.
+# Pinned to a version known to support Qwen2.5-VL.
+transformers==4.46.3
+
+# Tokenizer / processor support (usually pulled in by transformers, but pinned)
+tokenizers>=0.20.3
+accelerate>=1.1.0
+
+# Image handling — Pillow is in base but we pin for safety
+Pillow>=10.4.0
+
+# HF Hub — for downloading weights at runtime if not baked into /models
+huggingface_hub>=0.26.0
+
+# Logging / utilities — lightweight
+# (nothing extra needed; stdlib logging is enough)

@@ -1,0 +1,12 @@
+{
+  "sample_01_california_plate.png": "7ABC123",
+  "sample_02_beijing_plate.png": "京A·12345",
+  "sample_03_newyork_plate.jpg": "JHT 2951",
+  "sample_04_motion_blur_plate.png": "5XYZ891",
+  "sample_05_shanghai_plate.jpg": "沪B·88888",
+  "sample_06_stop_sign.png": "STOP",
+  "sample_07_stop_sign_noisy.tiff": "STOP",
+  "sample_08_speed_limit.jpg": "SPEED LIMIT 65",
+  "sample_09_work_zone.png": "ROAD WORK AHEAD",
+  "sample_10_advisory_plaque.tiff": "35"
+}

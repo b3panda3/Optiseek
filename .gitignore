@@ -1,0 +1,36 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+.pytest_cache/
+
+# Local test output
+_test_output/
+output/
+*.log
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+
+# Local model weights (do NOT commit these — too large)
+models/
+/models/
+*.safetensors
+*.bin
+
+# Docker
+docker-compose.override.yml
+
+# Env
+.env
+.env.local
+
+# Keep these directories (with .gitkeep)
+!samples/.gitkeep
