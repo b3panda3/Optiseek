@@ -136,7 +136,7 @@ optiseek/
 ### Step 1 — Clone & install
 
 ```bash
-cd /home/z/my-project/optiseek
+cd /my-project/optiseek
 pip install -r app/requirements.txt
 ```
 
@@ -214,7 +214,7 @@ Build it on a machine with Docker and ~50 GiB free disk.
 ### Option A — Build with weights downloaded at build time (production)
 
 ```bash
-cd /home/z/my-project/optiseek
+cd /my-project/optiseek
 docker build -t optiseek:latest .
 ```
 
@@ -360,7 +360,7 @@ python3 test/run_local_tests.py \
 - [ ] All 10 sample images pass the local harness.
 - [ ] No `.env`, API keys, or credentials in the image.
 - [ ] Image is publicly pullable (test with `docker pull` from another host).
-- [ ] README is up to date with your final image tag.
+- [ ] README is up to date.
 
 ### Submission Guideline
 
@@ -371,8 +371,6 @@ python3 test/run_local_tests.py \
    ```
 2. Submit the image reference (e.g. `docker.io/yourname/optiseek:latest`) on
    the LabLab hackathon page.
-3. **Do NOT commit the image reference to a public repo.** The image must be
-   public, but its location shouldn't be advertised.
 
 ---
 
