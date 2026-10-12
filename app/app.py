@@ -142,6 +142,29 @@ def main(argv: list[str] | None = None) -> int:
     log.info("Optiseek starting | model=%s | input=%s", model_name(), input_path)
     log.info("Output target: %s", output_path)
 
+    # Diagnostic: log GPU + weights status (helps debug eval failures)
+    try:
+        import torch
+        log.info("GPU available: %s", torch.cuda.is_available())
+        if torch.cuda.is_available():
+            log.info("GPU device: %s", torch.cuda.get_device_name(0))
+            free, total = torch.cuda.mem_get_info()
+            log.info("VRAM: %.1f GiB free / %.1f GiB total", free/1e9, total/1e9)
+        else:
+            log.warning("NO GPU AVAILABLE — will fail VRAM floor gate (1 GiB minimum)")
+    except Exception as e:
+        log.warning("Could not check GPU status: %s", e)
+
+    try:
+        from pathlib import Path as _P
+        weights_path = _P("/models/Qwen2.5-VL-3B-Instruct")
+        if weights_path.exists():
+            log.info("Weights found at: %s", weights_path)
+        else:
+            log.error("Weights MISSING at: %s — will fail at eval time (no network)", weights_path)
+    except Exception:
+        pass
+
     if not input_path.exists():
         log.error("Input image not found: %s", input_path)
         return 2

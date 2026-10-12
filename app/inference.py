@@ -78,13 +78,20 @@ class VLMTransformers:
         log.info("Loading %s via transformers from %s", model_name(), model_path)
         t0 = time.time()
 
-        # bf16 on ROCm MI300X is well-supported.
-        # device_map='cuda:0' places all layers on GPU directly (no auto-split overhead).
-        # low_cpu_mem_usage=True streams weights from disk instead of materializing in CPU RAM.
+        # Detect GPU device — the grader's GPU may be at a different index
+        # or named differently. Fall back to CPU ONLY if no GPU is available
+        # (which would fail the VRAM floor gate, but at least produce output).
+        if torch.cuda.is_available():
+            device = f"cuda:{torch.cuda.current_device()}"
+            log.info("Using GPU device: %s (%s)", device, torch.cuda.get_device_name(0))
+        else:
+            device = "cpu"
+            log.warning("No GPU available! Falling back to CPU. This will fail the VRAM gate.")
+
         self.model = AutoModelForImageTextToText.from_pretrained(
             model_path,
             dtype=torch.bfloat16,
-            device_map="cuda:0",
+            device_map=device,
             trust_remote_code=True,
             low_cpu_mem_usage=True,
         )

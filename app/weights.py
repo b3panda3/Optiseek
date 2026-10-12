@@ -39,6 +39,10 @@ def resolve_model_path() -> str:
     Returns:
         - A local directory path if weights are on disk
         - A HuggingFace model ID (string) if download is required
+
+    IMPORTANT: At eval time, the container has NO network access. If the
+    baked-in weights are missing, we must fail loudly rather than silently
+    falling back to a download that will hang for 30s and score 0.
     """
     # 1. Env override (dev convenience — also used by bootstrap.sh)
     env_path = os.environ.get(ENV_VAR)
@@ -46,15 +50,19 @@ def resolve_model_path() -> str:
         p = Path(env_path)
         if p.exists() and (p / "config.json").exists():
             return str(p)
-        # If env var is set but path doesn't exist, fall through to other
-        # resolution methods (don't silently fail).
+        # If env var is set but path doesn't exist, fall through
 
     # 2. Baked-in weights (production / eval)
     for baked in BAKED_PATHS:
         if baked.exists() and (baked / "config.json").exists():
             return str(baked)
 
-    # 3. HF Hub fallback (downloads to ~/.cache/huggingface on first use)
+    # 3. HF Hub fallback — ONLY in dev (network available)
+    # At eval time this would hang. Log a clear warning.
+    import logging
+    log = logging.getLogger("optiseek.weights")
+    log.error("No baked-in weights found! Checked: %s", [str(p) for p in BAKED_PATHS])
+    log.error("Falling back to HF Hub download — this will FAIL at eval time (no network).")
     return DEFAULT_MODEL_ID
 
 
